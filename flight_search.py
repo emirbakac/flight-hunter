@@ -50,3 +50,20 @@ class FlightSearch:
             return "Not Found"
         else:
             return code
+
+    def search_flights(self, origin_city, destination_city, from_date, to_date):
+        headers = {"Authorization": f"Bearer {self._token}"}
+        query = {
+            "originLocationCode": origin_city,
+            "destinationLocationCode": destination_city,
+            "departureDate": from_date.strftime("%Y-%m-%d"),
+            "returnDate": to_date.strftime("%Y-%m-%d"),
+            "adults": 1,
+            "nonStop": 'true',
+            "currencyCode": "USD",
+            "max": 10
+        }
+        response = requests.get(url=FLIGHT_ENDPOINT, headers=headers, params=query)
+        response.raise_for_status()
+
+        return response.json()
